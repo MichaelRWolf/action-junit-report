@@ -15,9 +15,16 @@ export function buildSummaryTables(
   const hasFailed = testResults.some(testResult => testResult.failed > 0)
   const hasTests = testResults.some(testResult => testResult.totalCount > 0)
 
-  const passedHeader = hasTests ? (hasPassed ? (hasFailed ? 'Passed ☑️' : 'Passed ✅') : 'Passed') : 'Passed ❌️'
-  const skippedHeader = hasSkipped ? 'Skipped ⚠️' : 'Skipped'
-  const failedHeader = hasFailed ? 'Failed ❌️' : 'Failed'
+ const passedHeader = !hasTests  ? 'Passed ❌️' :
+                      !hasPassed ? 'Passed'    :
+                      hasFailed  ? 'Passed ☑️' :
+                                   'Passed ✅' ;
+
+  const skippedHeader = hasSkipped ? 'Skipped ⚠️'
+                                   : 'Skipped';
+
+  const failedHeader = hasFailed ? 'Failed ❌️'
+                                 : 'Failed';
 
   const table: SummaryTableRow[] = [
     [
