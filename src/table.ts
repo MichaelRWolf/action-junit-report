@@ -9,14 +9,18 @@ export function buildSummaryTables(
   flakySummary: boolean,
   groupSuite = false
 ): [SummaryTableRow[], SummaryTableRow[], SummaryTableRow[]] {
-  // only include a warning icon if there are skipped tests
   const hasPassed = testResults.some(testResult => testResult.passed > 0)
   const hasSkipped = testResults.some(testResult => testResult.skipped > 0)
   const hasFailed = testResults.some(testResult => testResult.failed > 0)
   const hasTests = testResults.some(testResult => testResult.totalCount > 0)
 
- const passedHeader = !hasTests  ? 'Passed ❌️' :
-                      !hasPassed ? 'Passed'    :
+
+// Decorate headers to draw attention to statuses that should drive a developer action.
+// For each header, most favorable decoration is the final one in the list.
+ const testsHeader = !hasTests  ? 'Tests ❌️' :
+                                  'Tests' ;
+
+ const passedHeader = !hasPassed ? 'Passed'    :
                       hasFailed  ? 'Passed ☑️' :
                                    'Passed ✅' ;
 
@@ -29,7 +33,7 @@ export function buildSummaryTables(
   const table: SummaryTableRow[] = [
     [
       {data: '', header: true},
-      {data: 'Tests', header: true},
+      {data: testsHeader, header: true},
       {data: passedHeader, header: true},
       {data: skippedHeader, header: true},
       {data: failedHeader, header: true}
